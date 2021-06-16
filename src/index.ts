@@ -1,2 +1,1 @@
-const str: string = 'Hello';
-console.log(str);
+export const Greeter = (name: string) => `Hello ${name}`;
