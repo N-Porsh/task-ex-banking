@@ -7,49 +7,49 @@ export class ExBanking implements ExBankingInterface {
   users: User[] = [];
 
   createUser(username: string): Ok | BankingError {
-    let user = this.findUserByUserName(username);
+    const user = this.findUserByUserName(username);
     if (user) {
       throw new UserAlreadyExists(username);
     }
 
-    //creates new user with default currency EUR and '0' amount
-    let newUser = new User(username);
+    // creates new user with default currency EUR and '0' amount
+    const newUser: User = new User(username);
     this.users.push(newUser);
 
     return { success: true };
   }
 
   deposit(username: string, amount: number, currency: string): (Ok & { newBalance: number }) | BankingError {
-    let user = this.findUserByUserName(username);
+    const user = this.findUserByUserName(username);
 
     if (!user) {
       throw new UserDoesNotExist(username);
     }
-    let newBalance = user.addMoney(amount, currency);
+    const newBalance: number = user.addMoney(amount, currency);
 
-    return { success: true, newBalance: newBalance };
+    return { success: true, newBalance};
   }
 
   withdraw(username: string, amount: number, currency: string): (Ok & { newBalance: number }) | BankingError {
-    let user = this.findUserByUserName(username);
+    const user = this.findUserByUserName(username);
 
     if (!user) {
       throw new UserDoesNotExist(username);
     }
-    let newBalance = user.withdrawMoney(amount, currency);
+    const newBalance = user.withdrawMoney(amount, currency);
 
-    return { success: true, newBalance: newBalance };
+    return { success: true, newBalance};
   }
 
   getBalance(username: string, currency: string): (Ok & { balance: number }) | BankingError {
-    let user = this.findUserByUserName(username);
+    const user = this.findUserByUserName(username);
     if (!user) {
       throw new UserDoesNotExist(username);
     }
 
     const balance: number = user.getBalance(currency);
 
-    return { success: true, balance: balance };
+    return { success: true, balance};
   }
 
   send(
@@ -58,24 +58,24 @@ export class ExBanking implements ExBankingInterface {
     amount: number,
     currency: string,
   ): (Ok & { fromUsernameBalance: number; toUsernameBalance: number }) | BankingError {
-    let userSender = this.findUserByUserName(fromUsername);
+    const userSender = this.findUserByUserName(fromUsername);
     if (!userSender) {
       throw new SenderDoesNotExist(fromUsername);
     }
 
-    let userReceiver = this.findUserByUserName(toUsername);
+    const userReceiver = this.findUserByUserName(toUsername);
     if (!userReceiver) {
       throw new ReceiverDoesNotExist(toUsername);
     }
 
-    let userSenderNewBalance: number = userSender.withdrawMoney(amount, currency);
-    let userReceiverNewBalance: number = userReceiver.addMoney(amount, currency);
+    const userSenderNewBalance: number = userSender.withdrawMoney(amount, currency);
+    const userReceiverNewBalance: number = userReceiver.addMoney(amount, currency);
 
     return { success: true, fromUsernameBalance: userSenderNewBalance, toUsernameBalance: userReceiverNewBalance };
   }
 
   private findUserByUserName(userName: string): User | undefined {
-    return this.users.find((user) => user.userName == userName);
+    return this.users.find((user) => user.userName === userName);
   }
 }
 
@@ -83,6 +83,7 @@ const banking = new ExBanking();
 
 banking.createUser('Nikita');
 banking.deposit('Nikita', 1000, 'EUR');
+banking.withdraw('Nikita', 15, 'EUR');
 banking.deposit('Nikita', 500, 'USD');
 // banking.deposit('Nikita', 123.123456789, 'EUR');
 banking.getBalance('Nikita', 'EUR');

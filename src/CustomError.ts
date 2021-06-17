@@ -10,7 +10,7 @@ export class WrongArguments extends CustomError {
   private arguments: any;
 
   constructor(args: any) {
-    let argsString = typeof args === 'object' ? JSON.stringify(args) : args;
+    const argsString = typeof args === 'object' ? JSON.stringify(args) : args;
     super('Arguments: ' + argsString);
     this.arguments = args;
   }

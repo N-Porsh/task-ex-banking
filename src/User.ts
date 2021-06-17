@@ -26,36 +26,35 @@ export class User {
   }
 
   public getBalance(currency: string): number {
-    let money = this.money.find((money) => money._currency == currency);
+    const money = this.money.find((item) => item._currency === currency);
     if (!money) {
       return 0;
     }
-    // console.debug('Currency: %s; amount: %d', currency, money._amount);
+
     return money._amount;
   }
 
   // todo: 2 decimal points
   public addMoney(value: number, currency: string): number {
-    let obj: MoneyInterface = {
+    const moneyObject: MoneyInterface = {
       _amount: value,
       _currency: currency,
     };
-    // find money data for the given currency
-    let money = this.money.find((money) => money._currency == currency);
+    const money = this.findUserMoney(currency);
 
     // simplify this block
     if (!money) {
-      this.money.push(obj);
+      this.money.push(moneyObject);
     } else {
       const index = this.money.findIndex((item) => item._currency === currency);
       this.money[index]._amount += value;
     }
 
-    return this.getBalance(currency); // does it work ?
+    return this.getBalance(currency);
   }
 
   public withdrawMoney(value: number, currency: string): number {
-    let money = this.money.find((money) => money._currency == currency);
+    const money = this.findUserMoney(currency);
 
     if (!money) {
       throw new WrongArguments(money);
@@ -68,6 +67,10 @@ export class User {
     this.money[index]._amount -= value;
 
     return this.money[index]._amount;
+  }
+
+  private findUserMoney(currency: string) {
+    return this.money.find((item) => item._currency === currency);
   }
 
   private hasEnoughMoney(currentBalance: number, amountToTake: number): boolean {

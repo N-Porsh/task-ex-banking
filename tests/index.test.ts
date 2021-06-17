@@ -22,4 +22,12 @@ describe('test createUser method', () => {
         expect(result).toEqual({success: true, balance: 0});
     });
 
+    test('deposit should add 1000 EUR to specific user', () => {
+        bank.createUser('John');
+        const result = bank.deposit('John', 1000, 'EUR');
+        const resultBalance = bank.getBalance('John', 'EUR');
+
+        expect(result).toEqual({success: true, newBalance: 1000});
+        expect(resultBalance).toEqual({success: true, balance: 1000});
+    });
 })
