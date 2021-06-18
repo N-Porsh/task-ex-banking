@@ -27,7 +27,7 @@ export class ExBanking implements ExBankingInterface {
     }
     const newBalance: number = user.addMoney(amount, currency);
 
-    return { success: true, newBalance};
+    return { success: true, newBalance };
   }
 
   withdraw(username: string, amount: number, currency: string): (Ok & { newBalance: number }) | BankingError {
@@ -38,7 +38,7 @@ export class ExBanking implements ExBankingInterface {
     }
     const newBalance = user.withdrawMoney(amount, currency);
 
-    return { success: true, newBalance};
+    return { success: true, newBalance };
   }
 
   getBalance(username: string, currency: string): (Ok & { balance: number }) | BankingError {
@@ -49,7 +49,7 @@ export class ExBanking implements ExBankingInterface {
 
     const balance: number = user.getBalance(currency);
 
-    return { success: true, balance};
+    return { success: true, balance };
   }
 
   send(
@@ -78,23 +78,3 @@ export class ExBanking implements ExBankingInterface {
     return this.users.find((user) => user.userName === userName);
   }
 }
-
-const banking = new ExBanking();
-
-banking.createUser('Nikita');
-banking.deposit('Nikita', 1000, 'EUR');
-banking.withdraw('Nikita', 15, 'EUR');
-banking.deposit('Nikita', 500, 'USD');
-// banking.deposit('Nikita', 123.123456789, 'EUR');
-banking.getBalance('Nikita', 'EUR');
-banking.getBalance('Nikita', 'USD');
-console.log(banking.users[0]);
-
-banking.createUser('John');
-banking.deposit('John', 500, 'EUR');
-banking.getBalance('John', 'EUR');
-console.log(banking.users[1]);
-
-banking.send('Nikita', 'John', 100, 'USD');
-console.log(banking.users[0]);
-console.log(banking.users[1]);
